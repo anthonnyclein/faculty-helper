@@ -78,16 +78,18 @@ export const auth = betterAuth({
   // Required env vars: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
   // Google Cloud Console callback URL: {NEXT_PUBLIC_APP_URL}/api/auth/callback/google
   // ---------------------------------------------------------------------------
-  // socialProviders: {
-  //   google: {
-  //     clientId: process.env.GOOGLE_CLIENT_ID!,
-  //     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-  //   },
-  //   // github: {
-  //   //   clientId: process.env.GITHUB_CLIENT_ID!,
-  //   //   clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-  //   // },
-  // },
+  // Google is enabled only when both credentials are configured; otherwise the app offers
+  // a clearly labeled demonstration mode instead of a simulated sign-in.
+  ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+    ? {
+        socialProviders: {
+          google: {
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          },
+        },
+      }
+    : {}),
 
   // Session configuration
   session: {
